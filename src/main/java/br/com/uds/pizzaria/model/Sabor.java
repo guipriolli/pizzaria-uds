@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Sabor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descricao;
     private Integer tempo;
@@ -34,5 +34,10 @@ public class Sabor {
 
     public void setTempo(Integer tempo) {
         this.tempo = tempo;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Sabor [id=%d, descricao='%s', tempo=%d]", id, descricao, tempo);
     }
 }

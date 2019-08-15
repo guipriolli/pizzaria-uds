@@ -1,18 +1,17 @@
 package br.com.uds.pizzaria.model;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "pedido")
 public class Pedido {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String tamanho;
     private String sabor;
-    private List<String> adicionais;
+    private String adicionais;
     private Double valor;
     private Integer tempo;
 
@@ -40,11 +39,11 @@ public class Pedido {
         this.sabor = sabor;
     }
 
-    public List<String> getAdicionais() {
+    public String getAdicionais() {
         return adicionais;
     }
 
-    public void setAdicionais(List<String> adicionais) {
+    public void setAdicionais(String adicionais) {
         this.adicionais = adicionais;
     }
 
@@ -62,5 +61,10 @@ public class Pedido {
 
     public void setTempo(Integer tempo) {
         this.tempo = tempo;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Adicionais [id=%d, tamanho='%s', sabor='%s', adicionais='%s', valor=%d, tempo=%d]", id, tamanho, sabor, adicionais, valor, tempo);
     }
 }

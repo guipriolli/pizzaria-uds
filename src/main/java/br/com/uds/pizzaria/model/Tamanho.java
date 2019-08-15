@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Tamanho {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descricao;
     private Double valor;
@@ -43,5 +43,10 @@ public class Tamanho {
 
     public void setTempo(Integer tempo) {
         this.tempo = tempo;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Tamanho [id=%d, descricao='%s', valor=%d, tempo=%d]", id, descricao, valor, tempo);
     }
 }
