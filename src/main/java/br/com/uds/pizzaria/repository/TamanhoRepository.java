@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TamanhoRepository extends JpaRepository<Tamanho, Long> {
 
+    Tamanho findTamanhoByDescricao(String descricao);
 }
