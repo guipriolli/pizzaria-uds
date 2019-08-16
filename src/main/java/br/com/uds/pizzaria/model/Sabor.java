@@ -1,16 +1,25 @@
 package br.com.uds.pizzaria.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "sabor")
-public class Sabor {
+public class Sabor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String descricao;
+
+    @Column(nullable = false)
     private Integer tempo;
+
+    @OneToMany(mappedBy = "sabor")
+    private List<Pedido> pedidos;
 
     public Long getId() {
         return id;

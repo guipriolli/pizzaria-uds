@@ -1,16 +1,23 @@
 package br.com.uds.pizzaria.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-@Table(name = "adicionais")
-public class Adicionais {
+@Table(name = "adicional")
+public class Adicional implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String descricao;
+
+    @Column(nullable = false)
     private Double valor;
+
+    @Column(nullable = false)
     private Integer tempo;
 
     public Long getId() {
@@ -47,7 +54,7 @@ public class Adicionais {
 
     @Override
     public String toString() {
-        return String.format("Adicionais [id=%d, descricao='%s', valor=%d, tempo=%d]", id, descricao, valor, tempo);
+        return String.format("Adicional [id=%d, descricao='%s', valor=%.2f, tempo=%d]", id, descricao, valor, tempo);
     }
 
 }

@@ -8,7 +8,7 @@ INSERT INTO sabor (descricao, tempo) VALUES
 	('marguerita', 0),
 	('portuguesa', 5);
 
-INSERT INTO adicionais (descricao, valor, tempo) VALUES 
+INSERT INTO adicional (descricao, valor, tempo) VALUES 
 	('extra bacon', 3.00, 0), 
 	('sem cebola', 0.00, 0), 
 	('borda recheada', 5.00, 5);

@@ -1,9 +1,9 @@
 package br.com.uds.pizzaria.repository;
 
-import br.com.uds.pizzaria.model.Adicionais;
+import br.com.uds.pizzaria.model.Adicional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AdicionaisRepository extends JpaRepository<Adicionais, Long> {
+public interface AdicionaisRepository extends JpaRepository<Adicional, Long> {
 
-    Adicionais findAdicionaisByDescricao(String descricao);
+    Adicional findAdicionaisByDescricao(String descricao);
 }

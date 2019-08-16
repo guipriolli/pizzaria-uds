@@ -1,6 +1,6 @@
 package br.com.uds.pizzaria.service.impl;
 
-import br.com.uds.pizzaria.model.Adicionais;
+import br.com.uds.pizzaria.model.Adicional;
 import br.com.uds.pizzaria.repository.AdicionaisRepository;
 import br.com.uds.pizzaria.service.AdicionaisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ public class AdicionaisServiceImpl implements AdicionaisService {
     AdicionaisRepository adicionaisRepository;
 
     @Override
-    public Adicionais findByDescricao(String descricao) {
+    public Adicional findByDescricao(String descricao) {
         return adicionaisRepository.findAdicionaisByDescricao(descricao);
     }
 }

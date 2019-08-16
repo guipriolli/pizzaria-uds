@@ -1,17 +1,28 @@
 package br.com.uds.pizzaria.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "tamanho")
-public class Tamanho {
+public class Tamanho implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String descricao;
+
+    @Column(nullable = false)
     private Double valor;
+
+    @Column(nullable = false)
     private Integer tempo;
+
+    @OneToMany(mappedBy = "tamanho")
+    private List<Pedido> pedidos;
 
     public Long getId() {
         return id;
@@ -47,6 +58,6 @@ public class Tamanho {
 
     @Override
     public String toString() {
-        return String.format("Tamanho [id=%d, descricao='%s', valor=%d, tempo=%d]", id, descricao, valor, tempo);
+        return String.format("Tamanho [id=%d, descricao='%s', valor=%.2f, tempo=%d]", id, descricao, valor, tempo);
     }
 }

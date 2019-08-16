@@ -1,6 +1,6 @@
 package br.com.uds.pizzaria.service.impl;
 
-import br.com.uds.pizzaria.model.Adicionais;
+import br.com.uds.pizzaria.model.Adicional;
 import br.com.uds.pizzaria.model.Pedido;
 import br.com.uds.pizzaria.model.Sabor;
 import br.com.uds.pizzaria.model.Tamanho;
@@ -12,7 +12,9 @@ import br.com.uds.pizzaria.service.TamanhoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service("pedidoService")
 public class PedidoServiceImpl implements PedidoService {
@@ -45,8 +47,8 @@ public class PedidoServiceImpl implements PedidoService {
         tempo += saborObj.getTempo();
 
         Pedido pedido = new Pedido();
-        pedido.setTamanho(tamanho);
-        pedido.setSabor(sabor);
+        pedido.setTamanho(tamanhoObj);
+        pedido.setSabor(saborObj);
         pedido.setValor(valor);
         pedido.setTempo(tempo);
 
@@ -60,23 +62,18 @@ public class PedidoServiceImpl implements PedidoService {
 
         Double valor = pedido.getValor();
         Integer tempo = pedido.getTempo();
-        String adicionaisStr = "";
+        Set<Adicional> adicionaisSet = new HashSet<>();
 
         for (String adicional : adicionais) {
-            Adicionais adicionalObj = adicionaisService.findByDescricao(adicional);
+            Adicional adicionalObj = adicionaisService.findByDescricao(adicional);
             valor += adicionalObj.getValor();
             tempo += adicionalObj.getTempo();
-            adicionaisStr += adicional + ", ";
-        }
-
-        int length = adicionaisStr.length();
-        if (length > 2) {
-            adicionaisStr = adicionaisStr.substring(0, length - 2);
+            adicionaisSet.add(adicionalObj);
         }
 
         pedido.setValor(valor);
         pedido.setTempo(tempo);
-        pedido.setAdicionais(adicionaisStr);
+        pedido.setAdicionais(adicionaisSet);
 
         return pedidoRepository.save(pedido);
     }

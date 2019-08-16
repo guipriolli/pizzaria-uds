@@ -1,18 +1,41 @@
 package br.com.uds.pizzaria.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "pedido")
-public class Pedido {
+public class Pedido implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String tamanho;
-    private String sabor;
-    private String adicionais;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_tamanho", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Tamanho tamanho;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_sabor", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Sabor sabor;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "pedido_adicionais", joinColumns = @JoinColumn(name = "id_pedido"), inverseJoinColumns = @JoinColumn(name = "id_adicional"))
+    private Set<Adicional> adicionais;
+
+    @Column(nullable = false)
     private Double valor;
+
+    @Column(nullable = false)
     private Integer tempo;
 
     public Long getId() {
@@ -23,27 +46,27 @@ public class Pedido {
         this.id = id;
     }
 
-    public String getTamanho() {
+    public Tamanho getTamanho() {
         return tamanho;
     }
 
-    public void setTamanho(String tamanho) {
+    public void setTamanho(Tamanho tamanho) {
         this.tamanho = tamanho;
     }
 
-    public String getSabor() {
+    public Sabor getSabor() {
         return sabor;
     }
 
-    public void setSabor(String sabor) {
+    public void setSabor(Sabor sabor) {
         this.sabor = sabor;
     }
 
-    public String getAdicionais() {
+    public Set<Adicional> getAdicionais() {
         return adicionais;
     }
 
-    public void setAdicionais(String adicionais) {
+    public void setAdicionais(Set<Adicional> adicionais) {
         this.adicionais = adicionais;
     }
 
@@ -65,6 +88,6 @@ public class Pedido {
 
     @Override
     public String toString() {
-        return String.format("Adicionais [id=%d, tamanho='%s', sabor='%s', adicionais='%s', valor=%d, tempo=%d]", id, tamanho, sabor, adicionais, valor, tempo);
+        return String.format("Pedido [id=%d, tamanho='%s', sabor='%s', adicionais='%s', valor=%.2f, tempo=%d]", id, tamanho, sabor, adicionais, valor, tempo);
     }
 }

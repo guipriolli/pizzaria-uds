@@ -1,8 +1,8 @@
 package br.com.uds.pizzaria.service;
 
-import br.com.uds.pizzaria.model.Adicionais;
+import br.com.uds.pizzaria.model.Adicional;
 
 public interface AdicionaisService {
 
-    Adicionais findByDescricao(String descricao);
+    Adicional findByDescricao(String descricao);
 }
