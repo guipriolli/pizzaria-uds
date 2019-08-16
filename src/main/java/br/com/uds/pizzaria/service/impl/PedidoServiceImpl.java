@@ -11,6 +11,7 @@ import br.com.uds.pizzaria.service.SaborService;
 import br.com.uds.pizzaria.service.TamanhoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +33,7 @@ public class PedidoServiceImpl implements PedidoService {
     AdicionaisService adicionaisService;
 
     @Override
+    @Transactional
     public Pedido montaPizza(String tamanho, String sabor) {
 
         Double valor = 0.0;
@@ -56,6 +58,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     @Override
+    @Transactional
     public Pedido personalizaPizza(Long id, List<String> adicionais) {
 
         Pedido pedido = pedidoRepository.findById(id).get();

@@ -1,13 +1,18 @@
 package br.com.uds.pizzaria.rest;
 
+import br.com.uds.pizzaria.dto.PedidoDTO;
+import br.com.uds.pizzaria.form.AdicionaisForm;
+import br.com.uds.pizzaria.form.PizzaForm;
 import br.com.uds.pizzaria.model.Pedido;
 import br.com.uds.pizzaria.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-import java.util.Map;
+import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping(path = "/api")
@@ -18,26 +23,23 @@ public class PedidoREST {
 
     @PostMapping(path = "/montar-pizza")
     @ResponseStatus(HttpStatus.CREATED)
-    public Pedido montarPizza(@RequestBody Map<String, String> pizza) {
-
-        String tamanho = pizza.get("tamanho");
-        String sabor = pizza.get("sabor");
-
-        return pedidoService.montaPizza(tamanho, sabor);
+    public ResponseEntity<PedidoDTO> montarPizza(@RequestBody @Valid PizzaForm pizza, UriComponentsBuilder uriBuilder) {
+        Pedido pedido = pedidoService.montaPizza(pizza.getTamanho(), pizza.getSabor());
+        URI uri = uriBuilder.path("/api/pedido/{id}").buildAndExpand(pedido.getId()).toUri();
+        return ResponseEntity.created(uri).body(new PedidoDTO(pedido));
     }
 
     @PutMapping(path = "/personalizar-pizza/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Pedido personalizarPizza(@PathVariable Long id, @RequestBody Map<String, List<String>> adicionais) {
-
-        List<String> adicionaisList = adicionais.get("adicionais");
-
-        return pedidoService.personalizaPizza(id, adicionaisList);
+    public ResponseEntity<PedidoDTO> personalizarPizza(@PathVariable Long id, @RequestBody AdicionaisForm adicionais) {
+        Pedido pedido = pedidoService.personalizaPizza(id, adicionais.getAdicionais());
+        return ResponseEntity.ok(new PedidoDTO(pedido));
     }
 
-    @GetMapping(path = "/montar-pedido/{id}")
+    @GetMapping(path = "/pedido/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Pedido montarPedido(@PathVariable Long id) {
-        return pedidoService.montaPedido(id);
+    public ResponseEntity<PedidoDTO> montarPedido(@PathVariable Long id) {
+        Pedido pedido = pedidoService.montaPedido(id);
+        return ResponseEntity.ok(new PedidoDTO(pedido));
     }
 }
