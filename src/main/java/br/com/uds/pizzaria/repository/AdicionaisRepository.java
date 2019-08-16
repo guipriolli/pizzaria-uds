@@ -5,4 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdicionaisRepository extends JpaRepository<Adicionais, Long> {
 
+    Adicionais findAdicionaisByDescricao(String descricao);
 }

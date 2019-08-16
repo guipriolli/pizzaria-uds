@@ -1,14 +1,18 @@
 package br.com.uds.pizzaria.service.impl;
 
+import br.com.uds.pizzaria.model.Adicionais;
 import br.com.uds.pizzaria.model.Pedido;
 import br.com.uds.pizzaria.model.Sabor;
 import br.com.uds.pizzaria.model.Tamanho;
 import br.com.uds.pizzaria.repository.PedidoRepository;
+import br.com.uds.pizzaria.service.AdicionaisService;
 import br.com.uds.pizzaria.service.PedidoService;
 import br.com.uds.pizzaria.service.SaborService;
 import br.com.uds.pizzaria.service.TamanhoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service("pedidoService")
 public class PedidoServiceImpl implements PedidoService {
@@ -22,41 +26,63 @@ public class PedidoServiceImpl implements PedidoService {
     @Autowired
     SaborService saborService;
 
+    @Autowired
+    AdicionaisService adicionaisService;
+
     @Override
-    public Pedido montaPizza(Pedido pedido) {
+    public Pedido montaPizza(String tamanho, String sabor) {
 
         Double valor = 0.0;
         Integer tempo = 0;
 
-        Tamanho tamanho = tamanhoService.findByDescricao(pedido.getTamanho());
+        Tamanho tamanhoObj = tamanhoService.findByDescricao(tamanho);
 
-        valor += tamanho.getValor();
-        tempo += tamanho.getTempo();
+        valor += tamanhoObj.getValor();
+        tempo += tamanhoObj.getTempo();
 
-        Sabor sabor = saborService.findByDescricao(pedido.getSabor());
+        Sabor saborObj = saborService.findByDescricao(sabor);
 
-        tempo += sabor.getTempo();
+        tempo += saborObj.getTempo();
 
+        Pedido pedido = new Pedido();
+        pedido.setTamanho(tamanho);
+        pedido.setSabor(sabor);
         pedido.setValor(valor);
         pedido.setTempo(tempo);
 
-        pedido = pedidoRepository.save(pedido);
-
-        return pedido;
+        return pedidoRepository.save(pedido);
     }
 
     @Override
-    public Pedido personalizaPizza(Pedido pedido) {
-        return null;
+    public Pedido personalizaPizza(Long id, List<String> adicionais) {
+
+        Pedido pedido = pedidoRepository.findById(id).get();
+
+        Double valor = pedido.getValor();
+        Integer tempo = pedido.getTempo();
+        String adicionaisStr = "";
+
+        for (String adicional : adicionais) {
+            Adicionais adicionalObj = adicionaisService.findByDescricao(adicional);
+            valor += adicionalObj.getValor();
+            tempo += adicionalObj.getTempo();
+            adicionaisStr += adicional + ", ";
+        }
+
+        int length = adicionaisStr.length();
+        if (length > 2) {
+            adicionaisStr = adicionaisStr.substring(0, length - 2);
+        }
+
+        pedido.setValor(valor);
+        pedido.setTempo(tempo);
+        pedido.setAdicionais(adicionaisStr);
+
+        return pedidoRepository.save(pedido);
     }
 
     @Override
-    public Pedido montaPedido() {
-        return null;
-    }
-
-    @Override
-    public Pedido findById(Long id) {
-        return null;
+    public Pedido montaPedido(Long id) {
+        return pedidoRepository.findById(id).get();
     }
 }

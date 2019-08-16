@@ -2,13 +2,13 @@ package br.com.uds.pizzaria.service;
 
 import br.com.uds.pizzaria.model.Pedido;
 
+import java.util.List;
+
 public interface PedidoService {
 
-    Pedido montaPizza(Pedido pedido);
+    Pedido montaPizza(String tamanho, String sabor);
 
-    Pedido personalizaPizza(Pedido pedido);
+    Pedido personalizaPizza(Long id, List<String> adicionais);
 
-    Pedido montaPedido();
-
-    Pedido findById(Long id);
+    Pedido montaPedido(Long id);
 }
