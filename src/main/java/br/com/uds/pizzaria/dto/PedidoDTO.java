@@ -13,6 +13,9 @@ public class PedidoDTO {
     private Integer tempo;
     private Double valor;
 
+    public PedidoDTO() {
+    }
+
     public PedidoDTO(Pedido pedido) {
         this.pizza = new PizzaDTO(pedido.getTamanho(), pedido.getSabor());
         this.tempo = pedido.getTempo();

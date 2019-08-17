@@ -9,6 +9,9 @@ public class PizzaDTO {
     private String sabor;
     private Double valor;
 
+    public PizzaDTO(){
+    }
+
     public PizzaDTO(Tamanho tamanho, Sabor sabor) {
         this.tamanho = tamanho.getDescricao();
         this.sabor = sabor.getDescricao();

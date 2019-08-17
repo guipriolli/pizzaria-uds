@@ -7,6 +7,9 @@ public class AdicionalDTO {
     private String descricao;
     private Double valor;
 
+    public AdicionalDTO() {
+    }
+
     public AdicionalDTO(Adicional adicional) {
         this.descricao = adicional.getDescricao();
         this.valor = adicional.getValor();
