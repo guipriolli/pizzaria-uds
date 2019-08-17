@@ -8,37 +8,25 @@ import java.util.stream.Collectors;
 
 public class PedidoDTO {
 
-    private TamanhoDTO tamanho;
-    private String sabor;
-    private List<AdicionalDTO> adicionais;
-    private Double valor;
+    private PizzaDTO pizza;
+    private List<AdicionalDTO> adicionais = new ArrayList<>();
     private Integer tempo;
+    private Double valor;
 
     public PedidoDTO(Pedido pedido) {
-        this.tamanho = new TamanhoDTO(pedido.getTamanho());
-        this.sabor = pedido.getSabor().getDescricao();
-        this.valor = pedido.getValor();
+        this.pizza = new PizzaDTO(pedido.getTamanho(), pedido.getSabor());
         this.tempo = pedido.getTempo();
+        this.valor = pedido.getValor();
         if (pedido.getAdicionais() != null)
             this.adicionais.addAll(pedido.getAdicionais().stream().map(AdicionalDTO::new).collect(Collectors.toList()));
-        else
-            this.adicionais = new ArrayList<>();
     }
 
-    public TamanhoDTO getTamanho() {
-        return tamanho;
+    public PizzaDTO getPizza() {
+        return pizza;
     }
 
-    public void setTamanho(TamanhoDTO tamanho) {
-        this.tamanho = tamanho;
-    }
-
-    public String getSabor() {
-        return sabor;
-    }
-
-    public void setSabor(String sabor) {
-        this.sabor = sabor;
+    public void setPizza(PizzaDTO pizza) {
+        this.pizza = pizza;
     }
 
     public List<AdicionalDTO> getAdicionais() {
@@ -49,19 +37,19 @@ public class PedidoDTO {
         this.adicionais = adicionais;
     }
 
-    public Double getValor() {
-        return valor;
-    }
-
-    public void setValor(Double valor) {
-        this.valor = valor;
-    }
-
     public Integer getTempo() {
         return tempo;
     }
 
     public void setTempo(Integer tempo) {
         this.tempo = tempo;
+    }
+
+    public Double getValor() {
+        return valor;
+    }
+
+    public void setValor(Double valor) {
+        this.valor = valor;
     }
 }
