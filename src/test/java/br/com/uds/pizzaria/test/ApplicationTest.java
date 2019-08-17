@@ -48,7 +48,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void testMontaPizza() throws Exception {
+    public void test() throws Exception {
 
         PizzaForm pizzaForm = new PizzaForm();
         pizzaForm.setTamanho("pequena");

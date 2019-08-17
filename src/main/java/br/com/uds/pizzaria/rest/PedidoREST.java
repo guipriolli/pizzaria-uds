@@ -32,14 +32,22 @@ public class PedidoREST {
     @PutMapping(path = "/personalizar-pizza/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PedidoDTO> personalizarPizza(@PathVariable Long id, @RequestBody AdicionaisForm adicionais) {
-        Pedido pedido = pedidoService.personalizaPizza(id, adicionais.getAdicionais());
-        return ResponseEntity.ok(new PedidoDTO(pedido));
+        try {
+            Pedido pedido = pedidoService.personalizaPizza(id, adicionais.getAdicionais());
+            return ResponseEntity.ok(new PedidoDTO(pedido));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(path = "/pedido/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<PedidoDTO> montarPedido(@PathVariable Long id) {
-        Pedido pedido = pedidoService.montaPedido(id);
-        return ResponseEntity.ok(new PedidoDTO(pedido));
+        try {
+            Pedido pedido = pedidoService.montaPedido(id);
+            return ResponseEntity.ok(new PedidoDTO(pedido));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

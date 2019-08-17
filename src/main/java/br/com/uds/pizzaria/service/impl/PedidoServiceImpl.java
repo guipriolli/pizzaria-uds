@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service("pedidoService")
@@ -41,10 +42,18 @@ public class PedidoServiceImpl implements PedidoService {
 
         Tamanho tamanhoObj = tamanhoService.findByDescricao(tamanho);
 
+        if (tamanhoObj == null) {
+            throw new RuntimeException("Tamanho não encontrado.");
+        }
+
         valor += tamanhoObj.getValor();
         tempo += tamanhoObj.getTempo();
 
         Sabor saborObj = saborService.findByDescricao(sabor);
+
+        if (saborObj == null) {
+            throw new RuntimeException("Sabor não encontrado.");
+        }
 
         tempo += saborObj.getTempo();
 
@@ -61,7 +70,13 @@ public class PedidoServiceImpl implements PedidoService {
     @Transactional
     public Pedido personalizaPizza(Long id, List<String> adicionais) {
 
-        Pedido pedido = pedidoRepository.findById(id).get();
+        Optional<Pedido> optionalPedido = pedidoRepository.findById(id);
+
+        if (!optionalPedido.isPresent()) {
+            throw new RuntimeException("Pedido não encotrado.");
+        }
+
+        Pedido pedido = optionalPedido.get();
 
         Double valor = pedido.getValor();
         Integer tempo = pedido.getTempo();
@@ -69,6 +84,11 @@ public class PedidoServiceImpl implements PedidoService {
 
         for (String adicional : adicionais) {
             Adicional adicionalObj = adicionaisService.findByDescricao(adicional);
+
+            if (adicionalObj == null) {
+                throw new RuntimeException("Sabor não encontrado.");
+            }
+
             valor += adicionalObj.getValor();
             tempo += adicionalObj.getTempo();
             adicionaisSet.add(adicionalObj);
@@ -83,6 +103,12 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Override
     public Pedido montaPedido(Long id) {
-        return pedidoRepository.findById(id).get();
+        Optional<Pedido> optionalPedido = pedidoRepository.findById(id);
+
+        if (!optionalPedido.isPresent()) {
+            throw new RuntimeException("Pedido não encotrado.");
+        }
+
+        return optionalPedido.get();
     }
 }
