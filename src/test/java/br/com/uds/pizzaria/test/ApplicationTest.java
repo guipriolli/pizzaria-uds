@@ -48,7 +48,7 @@ public class ApplicationTest {
     }
 
     @Test
-    public void test() throws Exception {
+    public void testeSuccesso() throws Exception {
 
         PizzaForm pizzaForm = new PizzaForm();
         pizzaForm.setTamanho("pequena");
@@ -88,5 +88,57 @@ public class ApplicationTest {
         Assert.assertEquals("borda recheada", pedidoDTO.getAdicionais().get(1).getDescricao());
         Assert.assertTrue(pedidoDTO.getValor() == 28.0);
         Assert.assertTrue(pedidoDTO.getTempo() == 20);
+    }
+
+    @Test
+    public void testeErroTamanho() throws Exception {
+        PizzaForm pizzaForm = new PizzaForm();
+        pizzaForm.setTamanho("gigante");
+        pizzaForm.setSabor("calabresa");
+
+        String requestJson = mapToJson(pizzaForm);
+
+        mockMvc.perform(
+                post("/api/montar-pizza")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson)
+        ).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testeErroSabor() throws Exception {
+        PizzaForm pizzaForm = new PizzaForm();
+        pizzaForm.setTamanho("grande");
+        pizzaForm.setSabor("frango");
+
+        String requestJson = mapToJson(pizzaForm);
+
+        mockMvc.perform(
+                post("/api/montar-pizza")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson)
+        ).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testeErroAdicionais() throws Exception {
+        AdicionaisForm adicionaisForm = new AdicionaisForm();
+        adicionaisForm.setAdicionais(Arrays.asList("catupiry"));
+
+        String requestJson = mapToJson(adicionaisForm);
+
+        mockMvc.perform(
+                put("/api/personalizar-pizza/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson)
+        ).andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    public void testeErroNaoEncontrado() throws Exception {
+        mockMvc.perform(
+                get("/api/pedido/{id}", 9)
+                        .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().is4xxClientError());
     }
 }

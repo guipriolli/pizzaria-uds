@@ -86,7 +86,7 @@ public class PedidoServiceImpl implements PedidoService {
             Adicional adicionalObj = adicionaisService.findByDescricao(adicional);
 
             if (adicionalObj == null) {
-                throw new RuntimeException("Sabor não encontrado.");
+                throw new RuntimeException("Adicional não encontrado.");
             }
 
             valor += adicionalObj.getValor();

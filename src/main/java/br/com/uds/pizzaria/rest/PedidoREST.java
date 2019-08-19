@@ -24,9 +24,13 @@ public class PedidoREST {
     @PostMapping(path = "/montar-pizza")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PedidoDTO> montarPizza(@RequestBody @Valid PizzaForm pizza, UriComponentsBuilder uriBuilder) {
-        Pedido pedido = pedidoService.montaPizza(pizza.getTamanho(), pizza.getSabor());
-        URI uri = uriBuilder.path("/api/pedido/{id}").buildAndExpand(pedido.getId()).toUri();
-        return ResponseEntity.created(uri).body(new PedidoDTO(pedido));
+        try {
+            Pedido pedido = pedidoService.montaPizza(pizza.getTamanho(), pizza.getSabor());
+            URI uri = uriBuilder.path("/api/pedido/{id}").buildAndExpand(pedido.getId()).toUri();
+            return ResponseEntity.created(uri).body(new PedidoDTO(pedido));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping(path = "/personalizar-pizza/{id}")
